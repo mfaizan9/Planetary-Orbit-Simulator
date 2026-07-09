@@ -1,0 +1,234 @@
+<!--
+  Planetary Orbit Simulator — Accessible HTML5 port (NAAP)
+  Built on the shared KL-UNL foundation. MUST be served over HTTP (see README.md):
+  the masthead fetches foundation/contents.json, which browsers block over file://.
+-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Planetary Orbit Simulator</title>
+
+<link rel="stylesheet" href="foundation/kl-unl.css">
+<link rel="stylesheet" href="styles/styles.css">
+
+<a class="sr-only sr-only-focusable" href="#main-content">Skip to main content</a>
+
+<div class="app-shell">
+  <kl-unl-masthead sim-id="planetaryorbitsimulator" json-url="foundation/contents.json"></kl-unl-masthead>
+
+  <main id="main-content" class="app-layout pos-layout">
+
+    <!-- ================= LEFT COLUMN (diagram + Kepler tabs) ================= -->
+    <div class="app-layout__left">
+
+      <!-- Orbit diagram -->
+      <section class="panel sim-panel" aria-labelledby="diagram-heading">
+        <h2 class="panel__heading" id="diagram-heading">Orbit Diagram</h2>
+        <div class="panel__canvas-wrap sim-canvas-wrap" id="stage-wrap">
+          <canvas id="stage" width="600" height="460"
+                  aria-label="Orbit diagram: the sun at one focus of the planet's elliptical orbit, with the planet moving along the ellipse."
+                  aria-describedby="stage-desc"></canvas>
+
+          <!-- Focusable/draggable handle for the planet (keyboard + pointer) -->
+          <div id="planet-handle" class="stage-handle" tabindex="0" role="slider"
+               aria-label="Planet position on its orbit"
+               aria-valuemin="0" aria-valuemax="360" aria-valuenow="0"></div>
+
+          <!-- Diagram text labels rendered as HTML overlays (zoom-friendly; math typeset by MathJax) -->
+          <span class="stage-label stage-label--r1" id="lbl-r1" hidden>\(r_1\)</span>
+          <span class="stage-label stage-label--r2" id="lbl-r2" hidden>\(r_2\)</span>
+          <span class="stage-label stage-label--detail" id="lbl-center" hidden>center</span>
+          <span class="stage-label stage-label--detail" id="lbl-focus" hidden>empty focus</span>
+          <span class="stage-label stage-label--brace" id="lbl-semimajor" hidden>semimajor axis</span>
+          <span class="stage-label stage-label--brace" id="lbl-semiminor" hidden>semiminor axis</span>
+        </div>
+        <p id="stage-desc" class="sr-only" aria-live="off"></p>
+      </section>
+
+      <!-- Kepler's laws tabbed panel -->
+      <section class="panel sim-panel" aria-labelledby="tabs-heading">
+        <h2 class="panel__heading" id="tabs-heading">Kepler&rsquo;s Laws</h2>
+        <div class="tabs">
+          <div class="tablist" role="tablist" aria-label="Kepler's laws and Newtonian features">
+            <button class="tab" id="tab-k1" role="tab" aria-selected="true"  aria-controls="panel-k1" type="button">Kepler&rsquo;s 1st Law</button>
+            <button class="tab" id="tab-k2" role="tab" aria-selected="false" aria-controls="panel-k2" type="button" tabindex="-1">Kepler&rsquo;s 2nd Law</button>
+            <button class="tab" id="tab-k3" role="tab" aria-selected="false" aria-controls="panel-k3" type="button" tabindex="-1">Kepler&rsquo;s 3rd Law</button>
+            <button class="tab" id="tab-nf" role="tab" aria-selected="false" aria-controls="panel-nf" type="button" tabindex="-1">Newtonian Features</button>
+          </div>
+
+          <!-- Kepler 1 -->
+          <div class="tabpanel" id="panel-k1" role="tabpanel" aria-labelledby="tab-k1" tabindex="0">
+            <fieldset class="control-fieldset">
+              <legend class="sr-only">Kepler&rsquo;s 1st Law display options</legend>
+              <div class="control-grid check-grid">
+                <div class="control-choice"><input type="checkbox" id="k1-empty-focus"><label for="k1-empty-focus">show empty focus</label></div>
+                <div class="control-choice"><input type="checkbox" id="k1-semiminor"><label for="k1-semiminor">show semiminor axis</label></div>
+                <div class="control-choice"><input type="checkbox" id="k1-center"><label for="k1-center">show center</label></div>
+                <div class="control-choice"><input type="checkbox" id="k1-semimajor"><label for="k1-semimajor">show semimajor axis</label></div>
+                <div class="control-choice"><input type="checkbox" id="k1-radial"><label for="k1-radial">show radial lines</label></div>
+              </div>
+            </fieldset>
+            <div class="readout" id="k1-eqn" aria-hidden="true"></div>
+            <div class="readout" id="k1-values" aria-hidden="true"></div>
+            <p class="sr-only" id="k1-sr"></p>
+          </div>
+
+          <!-- Kepler 2 -->
+          <div class="tabpanel" id="panel-k2" role="tabpanel" aria-labelledby="tab-k2" tabindex="0" hidden>
+            <div class="control-row k2-size-row">
+              <label for="k2-duration" class="control-row__label">adjust size:</label>
+              <input type="range" id="k2-duration" class="control-row__slider" min="2" max="40" step="2" value="16"
+                     aria-label="Fractional sweep size denominator">
+            </div>
+            <div class="readout" id="k2-fraction" aria-hidden="true"></div>
+            <div class="readout" id="k2-detail" aria-hidden="true"></div>
+            <div class="button-row k2-btn-row">
+              <button type="button" id="k2-sweep" class="button">start sweeping</button>
+              <button type="button" id="k2-erase" class="button button--secondary">erase sweeps</button>
+            </div>
+            <fieldset class="control-fieldset">
+              <legend class="sr-only">Kepler&rsquo;s 2nd Law sweep options</legend>
+              <div class="control-choice"><input type="checkbox" id="k2-continuous"><label for="k2-continuous">sweep continuously</label></div>
+              <div class="control-choice"><input type="checkbox" id="k2-sound"><label for="k2-sound">use sound effect</label></div>
+            </fieldset>
+            <p class="sr-only" id="k2-sr"></p>
+          </div>
+
+          <!-- Kepler 3 -->
+          <div class="tabpanel" id="panel-k3" role="tabpanel" aria-labelledby="tab-k3" tabindex="0" hidden>
+            <fieldset class="control-fieldset control-fieldset--plot">
+              <legend class="control-fieldset__legend">plot type:</legend>
+              <div class="control-choice"><input type="radio" name="k3-plot-type" id="k3-linear" value="linear" checked><label for="k3-linear">linear</label></div>
+              <div class="control-choice"><input type="radio" name="k3-plot-type" id="k3-log" value="log"><label for="k3-log">logarithmic</label></div>
+            </fieldset>
+            <div class="k3-layout">
+              <div class="panel__canvas-wrap sim-canvas-wrap k3-canvas-wrap">
+                <canvas id="k3-plot" width="300" height="200" aria-describedby="k3-plot-desc"></canvas>
+                <p id="k3-plot-desc" class="sr-only" aria-live="off"></p>
+              </div>
+              <div class="readout" id="k3-values" aria-hidden="true"></div>
+            </div>
+            <p class="sr-only" id="k3-sr"></p>
+          </div>
+
+          <!-- Newtonian Features -->
+          <div class="tabpanel" id="panel-nf" role="tabpanel" aria-labelledby="tab-nf" tabindex="0" hidden>
+            <fieldset class="control-fieldset">
+              <legend class="sr-only">Newtonian feature display options</legend>
+              <div class="control-grid check-grid">
+                <div class="control-choice"><input type="checkbox" id="nf-vel-arrow"><label for="nf-vel-arrow">show velocity vector</label></div>
+                <div class="control-choice"><input type="checkbox" id="nf-acc-arrow"><label for="nf-acc-arrow">show acceleration vector</label></div>
+                <div class="control-choice"><input type="checkbox" id="nf-vel-tangent"><label for="nf-vel-tangent">show velocity tangent line</label></div>
+                <div class="control-choice"><input type="checkbox" id="nf-acc-line"><label for="nf-acc-line">show acceleration line</label></div>
+              </div>
+            </fieldset>
+            <div class="k3-layout">
+              <div class="panel__canvas-wrap sim-canvas-wrap nf-canvas-wrap">
+                <canvas id="nf-plot" width="360" height="210" aria-describedby="nf-plot-desc"></canvas>
+                <p id="nf-plot-desc" class="sr-only" aria-live="off"></p>
+              </div>
+              <div class="readout" id="nf-values" aria-hidden="true"></div>
+            </div>
+            <p class="sr-only" id="nf-sr"></p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ================= RIGHT COLUMN (controls) ================= -->
+    <div class="app-layout__right">
+
+      <!-- Orbit Settings -->
+      <section class="panel sim-panel" aria-labelledby="orbit-heading">
+        <h2 class="panel__heading" id="orbit-heading">Orbit Settings</h2>
+
+        <div class="control-row preset-row">
+          <label for="planet-select" class="control-row__label">set parameters for:</label>
+          <select id="planet-select" class="preset-select">
+            <option value="0">Mercury</option>
+            <option value="1">Venus</option>
+            <option value="2">Earth</option>
+            <option value="3">Mars</option>
+            <option value="4">Jupiter</option>
+            <option value="5">Saturn</option>
+            <option value="6">Uranus</option>
+            <option value="7">Neptune</option>
+            <option value="8">Pluto</option>
+          </select>
+          <button type="button" id="preset-ok" class="button preset-ok">OK</button>
+        </div>
+
+        <fieldset class="control-fieldset">
+          <legend class="control-fieldset__legend">semimajor axis (AU)</legend>
+          <div class="control-row slider-row">
+            <input type="text" inputmode="decimal" id="a-field" class="control-row__input value-field"
+                   maxlength="7" value="1.00" aria-label="Semimajor axis, in astronomical units">
+            <input type="range" id="a-slider" class="control-row__slider" aria-label="Semimajor axis in astronomical units">
+          </div>
+        </fieldset>
+
+        <fieldset class="control-fieldset">
+          <legend class="control-fieldset__legend">eccentricity</legend>
+          <div class="control-row slider-row">
+            <input type="text" inputmode="decimal" id="e-field" class="control-row__input value-field"
+                   maxlength="7" value="0.400" aria-label="Eccentricity">
+            <input type="range" id="e-slider" class="control-row__slider" min="0" max="0.7" step="0.001" value="0.4"
+                   aria-label="Eccentricity">
+          </div>
+        </fieldset>
+      </section>
+
+      <!-- Animation Controls -->
+      <section class="panel sim-panel" aria-labelledby="anim-heading">
+        <h2 class="panel__heading" id="anim-heading">Animation Controls</h2>
+        <div class="anim-btn-wrap">
+          <button type="button" id="animate-btn" class="button anim-btn">start animation</button>
+        </div>
+        <fieldset class="control-fieldset">
+          <legend class="control-fieldset__legend">animation rate (yrs/s)</legend>
+          <div class="control-row slider-row">
+            <input type="text" inputmode="decimal" id="rate-field" class="control-row__input value-field"
+                   maxlength="7" value="0.20" aria-label="Animation rate, in simulated years per second">
+            <input type="range" id="rate-slider" class="control-row__slider" aria-label="Animation rate in simulated years per second">
+          </div>
+        </fieldset>
+      </section>
+
+      <!-- Visualization Options -->
+      <section class="panel sim-panel" aria-labelledby="viz-heading">
+        <h2 class="panel__heading" id="viz-heading">Visualization Options</h2>
+        <fieldset class="control-fieldset">
+          <legend class="sr-only">Visualization options</legend>
+          <div class="control-choice"><input type="checkbox" id="viz-ss-orbits"><label for="viz-ss-orbits">show solar system orbits</label></div>
+          <div class="control-choice"><input type="checkbox" id="viz-ss-planets" disabled><label for="viz-ss-planets">show solar system planets</label></div>
+          <div class="control-choice"><input type="checkbox" id="viz-ss-labels" disabled><label for="viz-ss-labels">label the solar system orbits</label></div>
+          <div class="control-choice"><input type="checkbox" id="viz-grid"><label for="viz-grid">show grid</label></div>
+        </fieldset>
+        <div class="viz-btn-wrap">
+          <button type="button" id="viz-clear" class="button">clear optional features</button>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<!-- Screen-reader live status region: announces state changes on commit -->
+<div id="sr-status" class="sr-only" aria-live="polite" role="status"></div>
+
+<!-- Foundation equation helper + masthead (copied in unchanged) -->
+<script src="foundation/kl-unl.js"></script>
+<script src="foundation/kl-unl-masthead.js"></script>
+
+<!-- MathJax (vendored locally; SVG output, no CDN/fonts). Right-click any symbol ->
+     MathJax menu ("Show Math As" -> TeX / MathML). Menu is left enabled. -->
+<script>
+  window.MathJax = {
+    loader: { failed: function (err) { console.warn('[MathJax] optional component not vendored:', err.message); } },
+    tex: { inlineMath: [['\\(', '\\)'], ['$', '$']] },
+    svg: { fontCache: 'local' },
+    options: { enableMenu: true, menuOptions: { settings: { assistiveMml: false } } }
+  };
+</script>
+<script src="assets/mathjax/tex-mml-svg.js"></script>
+
+<!-- Sim logic -->
+<script src="simulation.js"></script>

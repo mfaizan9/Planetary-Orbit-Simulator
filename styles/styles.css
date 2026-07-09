@@ -1,0 +1,227 @@
+/* ============================================================================
+   Planetary Orbit Simulator — sim-specific styles.
+   Layered on top of the KL-UNL foundation (kl-unl.css). Never edits foundation.
+   Uses foundation CSS custom properties and rem-based sizing for zoom/reflow.
+   ============================================================================ */
+
+:root {
+  --pos-gap: 0.75rem;
+  --pos-space-blue:  #0099ff;  /* semimajor brace / space accent */
+  --pos-space-pink:  #ff9999;  /* semiminor brace */
+}
+
+/* Comfortable, zoomable base type (>= ~1.125rem floor) */
+.sim-panel {
+  font-size: 1.05rem;
+}
+
+/* ---- Layout: wide diagram column on the left, narrow controls on the right.
+   Overrides the foundation .app-layout column order for this sim only. ---- */
+.pos-layout {
+  grid-template-columns: minmax(0, 1fr) 24rem;
+  gap: var(--pos-gap);
+  padding: 0.5rem;
+  align-items: stretch;   /* both columns take the height of the taller one */
+}
+.pos-layout .app-layout__left,
+.pos-layout .app-layout__right {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pos-gap);
+  min-width: 0;
+}
+/* Grow the panels themselves to fill the shorter column so both columns end level,
+   keeping tight, consistent gaps (extra height goes into the boxes, not between them). */
+.pos-layout .app-layout__left > .sim-panel,
+.pos-layout .app-layout__right > .sim-panel {
+  flex: 1 1 auto;
+}
+
+.sim-panel { padding-bottom: 0.75rem; }
+.panel__heading { font-size: 1.15rem; }
+
+/* ---- Canvas stage ---- */
+.sim-canvas-wrap {
+  position: relative;
+  padding: 0 1rem;
+  line-height: 0;
+}
+#stage-wrap { padding: 0 1rem 0.5rem; }
+#stage {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  background: #000;
+  border: 1px solid var(--border-color, #767676);
+  touch-action: none;   /* the planet/sweeps are dragged on the canvas */
+}
+
+/* Focusable draggable handle for the planet (visually a ring over the planet) */
+.stage-handle {
+  position: absolute;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin: 0;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  cursor: grab;
+  background: transparent;
+}
+.stage-handle:focus-visible {
+  outline: 0.125rem solid var(--outline-color, #005fcc);
+  outline-offset: 0.125rem;
+  border-radius: 50%;
+}
+
+/* Diagram text overlays (zoom with the page; positioned each render in % of the wrap) */
+.stage-label {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 0.8rem;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+  text-shadow: 0 0 3px #000, 0 0 3px #000;
+}
+.stage-label--r1, .stage-label--r2 { color: #dfe6ff; }
+.stage-label--brace { color: var(--pos-space-blue); }
+.stage-label--detail { color: #e8e8e8; }
+
+/* ---- Value fields + sliders ---- */
+.slider-row {
+  grid-template-columns: 5rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+}
+.value-field {
+  width: 5rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.control-row__slider { width: 100%; }
+
+/* Orbit-settings preset row */
+.preset-row {
+  grid-template-columns: auto minmax(4rem, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding: 0 1rem;   /* inset to match the fieldset content below (edges align) */
+}
+.preset-select {
+  min-height: 2.5rem;
+  padding: 0.25rem 0.4rem;
+  font-size: 1rem;
+  color: var(--foreground-color, #1a1a1a);
+  background: var(--background-color, #fff);
+  border: var(--border-width, 1px) var(--border-style, solid) var(--border-color, #767676);
+}
+.preset-ok { padding: 0.35rem 0.9rem; }
+
+/* Primary buttons: blue fill, white text (foundation defines the colors but not the fill).
+   The outlined `.button--secondary` variant keeps its own look. */
+.pos-layout .button:not(.button--secondary) {
+  background: var(--button-background-color, #005a9c);
+  color: var(--button-foreground-color, #fff);
+  border: none;
+  border-radius: 0.25rem;
+}
+.pos-layout .button:not(.button--secondary):hover:not(:disabled) {
+  filter: brightness(var(--button-hover-darken, 0.9));
+}
+.button[disabled], .button:disabled { opacity: 0.5; cursor: default; }
+.control-choice input:disabled + label { opacity: 0.55; cursor: default; }
+
+.anim-btn-wrap, .viz-btn-wrap { padding: 0.25rem 1rem 0.5rem; }
+.anim-btn { width: 100%; }
+.viz-btn-wrap { display: flex; justify-content: center; }
+
+.button--secondary {
+  background: var(--background-color, #fff);
+  color: var(--button-background-color, #005a9c);
+  border: var(--border-width, 1px) var(--border-style, solid) var(--button-background-color, #005a9c);
+}
+
+/* ---- Tabs ---- */
+.tabs { padding: 0 1rem; }
+.tablist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  border-bottom: 3px solid var(--border-bottom-color, #005a9c);
+  margin-bottom: 0.75rem;
+}
+.tab {
+  appearance: none;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.85rem;
+  font-size: 1rem;
+  cursor: pointer;
+  color: var(--foreground-color, #1a1a1a);
+  background: #e9eef5;
+  border: 1px solid var(--border-color, #767676);
+  border-bottom: none;
+  border-radius: 0.35rem 0.35rem 0 0;
+}
+.tab[aria-selected="true"] {
+  background: var(--button-background-color, #005a9c);
+  color: var(--button-foreground-color, #fff);
+  font-weight: bold;
+}
+.tabpanel { padding-bottom: 0.5rem; }
+.tabpanel:focus-visible { outline: 0.125rem solid var(--outline-color, #005fcc); outline-offset: 0.125rem; }
+
+.check-grid { gap: 0.4rem 1.25rem; margin-top: 0.25rem; }
+
+/* ---- Readouts (MathJax equations / values) ---- */
+.readout {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+.readout mjx-container { margin: 0 0.15rem; }
+#k1-eqn, #k3-values { text-align: center; }
+#k1-values { text-align: center; font-variant-numeric: tabular-nums; }
+
+.k2-size-row { grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 0.5rem 0.75rem; }
+.k2-btn-row { gap: 0.75rem; margin: 0.5rem 0; }
+
+/* Kepler-3 / Newton plot + values side by side, stacking when narrow */
+.k3-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: start;
+}
+.k3-canvas-wrap, .nf-canvas-wrap { padding: 0; }
+#k3-plot, #nf-plot {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  background: #fff;
+  border: 1px solid var(--border-color, #767676);
+}
+
+/* ---- Responsive: collapse to single column at the foundation's 56rem breakpoint,
+   and keep everything comfortable down to phone portrait. ---- */
+@media (max-width: 56rem) {
+  .pos-layout { grid-template-columns: 1fr; }
+}
+@media (min-width: 40rem) {
+  .k3-layout { grid-template-columns: minmax(0, 1fr) 12rem; }
+}
+
+@media (max-width: 30rem) {
+  .sim-panel { font-size: 1rem; }
+  .tab { flex: 1 1 45%; }
+  .slider-row { grid-template-columns: 1fr; }
+  .value-field { width: 100%; }
+  .preset-row { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto; }
+}
