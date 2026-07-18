@@ -1711,5 +1711,69 @@
         "content": "<p>For additional astronomy education materials please visit <a href=\"https://astro.unl.edu/\" target=\"_blank\" rel=\"noopener noreferrer\">Astronomy Education<span class=\"sr-only\"> (opens in new tab)</span></a> at the University of Nebraska-Lincoln.</p><p>This simulator has been modernized by the AAS Applet Task Force to meet modern web accessibility standards (WCAG 2.1 AA).</p><p>Initial funding for this work was provided by NSF grants #0231270 and/or #0404988.</p><p>Copyright 2026 The Board of Regents of the University of Nebraska</p><p class=\"p-indent\">Licensed under <a href=\"https://www.apache.org/licenses/LICENSE-2.0\" target=\"_blank\" rel=\"noopener noreferrer\">the Apache License, Version 2.0<span class=\"sr-only\"> (opens in new tab)</span></a> (the \"License\"); you may not use this file except in compliance with the License.</p><p class=\"p-indent\">Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</p>"
       }
     }
+  },
+  "celestialEquatorial": {
+    "meta": {
+      "title": "Celestial-Equatorial (RA/Dec) Demonstrator",
+      "version": "2.0 (Accessible HTML5)"
+    },
+    "masthead": {
+      "help": {
+        "title": "Help and Instructions",
+        "content": ""
+      },
+      "about": {
+        "title": "About this Demonstrator",
+        "content": "<p>Funding for this work was provided by NSF grants #0231270 and/or #0404988.</p><p>Permission is granted to use this file for noncommercial purposes as long as it remains unmodified.</p><p>For additional astronomy education materials please visit our website at <a href=\"https://astro.unl.edu/\">astro.unl.edu</a>.</p><p>This demonstrator has been modernized by a AAS Task Force to meet modern web accessibility standards (WCAG 2.1 AA). It is based on celestialEquatorialDemo008 (22 July 2009).</p>"
+      }
+    }
+  },
+  "lunarphasesimulator": {
+    "meta": {
+      "title": "Lunar Phase Simulator",
+      "version": "2.0"
+    },
+    "masthead": {
+      "help": {
+        "title": "Help and Instructions",
+        "content": "<p>This simulator demonstrates the correspondence between the moon's position in its orbit, its phase, and its position in an observer's sky at different times of day.</p><p>The upper left panel shows the orbit visualization. The moon can be dragged around to change its position, and the earth can be dragged around to change its rotation. You can also use the <b>Animation and Time Controls</b> panel to control the simulation.</p><p>The <b>Moon Phase</b> panel shows how the moon would appear from earth given the geometry shown in the visualization panel. The <b>Horizon Diagram</b> panel shows how the sky would appear for the stickfigure shown standing on the globe. Note that this horizon diagram assumes an observer in the mid-northern latitudes (e.g. the continental US).</p><p>Checking the <b>show angle</b> checkbox in the <b>Diagram Options</b> panel will show the elongation angle of the moon in the visualization panel as well as the horizon diagram. The lunar landmark option lets you see a reference point on the moon's near side, which also shows up in the <b>Moon Phase</b> panel. The time tickmarks show the time of day for various positions around the globe.</p><p>You may notice that the <b>Moon Phase</b> and <b>Horizon Diagram</b> panels have a <b>show/hide</b> button. This feature can be useful when using the simulator as a demonstration tool in the classroom. For answering questions in the student guide you will want to keep the panel contents shown.</p><p>Keyboard: Tab to the moon or earth handle in the orbit view, then use the arrow keys (Page Up/Down for larger steps, Home/End for limits) to move the moon or change the time of day.</p>"
+      },
+      "about": {
+        "title": "About this Simulator",
+        "content": "<p>This simulator is part of the Lunar Phase Module of the Nebraska Astronomy Applet Project. For additional astronomy education materials please visit <a href=\"https://astro.unl.edu/\">Astronomy Education</a> at the University of Nebraska-Lincoln.</p><p>Funding for this work was provided by NSF grants #0231270 and/or #0404988.</p><p>Permission is granted to use these files for noncommercial purposes as long as they remain unmodified.</p><p>This simulator has been modernized by the AAS Applet Task Force to meet modern web accessibility standards (WCAG 2.1 AA).</p>"
+      }
+    }
+  },
+  "newtongravity": {
+    "meta": {
+      "title": "Newton's Law of Gravity Calculator",
+      "version": "2.0"
+    },
+    "masthead": {
+      "help": {
+        "title": "Help and Instructions",
+        "content": ""
+      },
+      "about": {
+        "title": "About this Calculator",
+        "content": "<p>Permission is granted to use these files for noncommercial purposes as long as they remain unmodified.</p><p>For additional astronomy education materials please visit <a href=\"https://astro.unl.edu/\">Astronomy Education</a> at the University of Nebraska-Lincoln.</p><p>This calculator has been modernized by the AAS Applet Task Force to meet modern web accessibility standards (WCAG 2.1 AA).</p><p>Initial funding for this work was provided by NSF grants #0231270 and/or #0404988.</p>"
+      }
+    }
+  },
+  "planetaryorbitsimulator": {
+    "meta": {
+      "title": "Planetary Orbit Simulator",
+      "version": "2.0"
+    },
+    "masthead": {
+      "help": {
+        "title": "Help and Instructions",
+        "content": "<p>This simulator models the motion of a hypothetical planet that orbits the sun according to Kepler's laws of motion.</p><p>The size and eccentricity of the planet's orbit can set using the sliders in the <em>Orbit Settings</em> panel. Presets for the existing planets can be loaded by selecting a planet from the combo box and clicking OK.</p><p>Since the planets take months to years to orbit the sun the animation is shown speeded up. You can control the animation rate in the <em>Animation Controls</em> panel. The rate is specified in simulated years per second.</p><p>The <em>Visualization Options</em> panel provides options for showing the solar system planets and their orbits. One thing to note is that all of the planets' orbits are shown pointing in the same direction. In reality this is not the case (nor are the planets in exactly the same plane).</p><p>The <em>clear optional features</em> hides the solar system planets and resets the features selected in the tabbed panel.</p><p>The tabbed panel beneath the visualization lets you control options specific to each of Kepler's laws. The <em>Newtonian Features</em> tab lets you see the velocity and acceleration vectors of the planet.</p><p>The orbit visualization window is partially interactive. The planet's position in the diagram can be adjusted by dragging it around (or, with the planet focused, using the arrow keys), as can the sweeps created using the <em>Kepler's 2nd Law</em> tab controls.</p>"
+      },
+      "about": {
+        "title": "About this Simulator",
+        "content": "<p>This simulator is part of the Planetary Orbit Simulator Module of the <a href=\"https://astro.unl.edu/\">Nebraska Astronomy Applet Project</a>. Supporting materials and additional astronomy education resources can be found there.</p><p>Funding for this work was provided by NSF grants #0231270 and/or #0404988.</p><p>Permission is granted to use this file for noncommercial purposes as long as it remains unmodified.</p><p>This simulator has been modernized by the AAS Applet Task Force to meet modern web accessibility standards (WCAG 2.1 AA).</p>"
+      }
+    }
   }
 }
