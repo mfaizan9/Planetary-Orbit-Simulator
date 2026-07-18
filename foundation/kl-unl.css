@@ -7,7 +7,7 @@
   --alert-color-r:           #ea351f;  /* red-orange         */
   --alert-color-g:           #b3f681;  /* light neon green   */
   --outline-color:           #005fcc;  /* deep azure blue    */
-  
+
   --button-foreground-color: #ffffff;  /* white              */
   --button-background-color: #005a9c;  /* french blue        */
   --button-outline-width:    2px;      /* aka focus ring     */
@@ -299,6 +299,10 @@ u
   display:        grid;
   grid-template-columns: 25rem 1fr;
   align-items:    start;
+}
+
+.p-indent {
+  margin-left:    20px;
 }
 
 /* Handheld widths (smaller screens) */

@@ -3,7 +3,7 @@ class KLUNLMasthead extends HTMLElement {
     super();
     // Attach a Shadow DOM to isolate styles and structure from the main page
     this.attachShadow({ mode: 'open' });
-    
+
     // Internal State Tracking
     this.hasReadHelp          = false;
     this.simData              = null;
@@ -100,7 +100,7 @@ class KLUNLMasthead extends HTMLElement {
           color:               var(--alert-color-g,             #b3f681);
           border-color:        var(--alert-color-g,             #b3f681);
         }
-        
+
         /* Modal Dialog Styling */
         /* (for overlay showing help or background information) */
         dialog {
@@ -167,7 +167,7 @@ class KLUNLMasthead extends HTMLElement {
       helpBtn.addEventListener('click', () => this.openModal('help', helpBtn));
     }
     aboutBtn.addEventListener('click', () => this.openModal('about', aboutBtn));
-    
+
     // Bubble the Reset event up so the individual simulation file can listen for it
     resetBtn.addEventListener('click', () => {
       this.dispatchEvent(new CustomEvent('sim-reset', { bubbles: true, composed: true }));
@@ -196,12 +196,12 @@ class KLUNLMasthead extends HTMLElement {
     const flatText           = tempDiv.textContent || tempDiv.innerText || "";
 
     // Set description text for the Close button
-    // 
+    //
     // Note that VoiceOver will say "close" first and then read the button
     // description. Getting to this point was fairly difficult, so we may have
     // to live with this order as it is fundamental to the accessibility model.
     // (First label element and then read descriptive text.)
-    // 
+    //
     srDesc.textContent       = flatText;
 
     // Handle Help button state modifications on initial click
@@ -217,7 +217,7 @@ class KLUNLMasthead extends HTMLElement {
     setTimeout(() => {
       this.shadowRoot.getElementById('closeDialogBtn-mh').focus();
     }, 50);
-    
+
   }
 
   closeModal() {
@@ -225,7 +225,7 @@ class KLUNLMasthead extends HTMLElement {
 
     // Clear description so it's ready for next time a masthead button is clicked
     this.shadowRoot.getElementById('sr-description-mh').textContent = "";
-    
+
     this.handleFocusRestoration();
   }
 
